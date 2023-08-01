@@ -1,15 +1,22 @@
 const express = require('express');
 const app = express();
 
+// dot env
 const dotenv = require('dotenv');
 dotenv.config();
 
+// other packages
+require('express-async-errors');
+const morgan = require('morgan');
+
+// db
 const connect = require('./db/connect');
 
-require('express-async-errors');
+// middleware
 const errorHandlerMiddleware = require('./middleware/error-handler');
 const notFoundMiddleware = require('./middleware/not-found');
 
+app.use(morgan('tiny'));
 app.use(express.json());
 
 app.use(notFoundMiddleware);
