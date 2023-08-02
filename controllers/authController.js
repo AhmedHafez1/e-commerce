@@ -7,11 +7,11 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  const { email } = req.body;
+  const { name, password, email } = req.body;
   const emailAlreadyExist = await User.findOne({ email });
   if (emailAlreadyExist)
     throw new Errors.BadRequestError('Email already exists!');
-  const user = await User.create(req.body);
+  const user = await User.create({ name, email, password });
   res.status(StatusCodes.CREATED).json({ user });
 };
 
