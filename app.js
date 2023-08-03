@@ -8,6 +8,7 @@ dotenv.config();
 // other packages
 require('express-async-errors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 // db
 const connect = require('./db/connect');
@@ -21,6 +22,17 @@ const notFoundMiddleware = require('./middleware/not-found');
 
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(cookieParser());
+
+app.get('/', (req, res) => {
+  console.log(req.cookies);
+  res.send('E-Commerce API');
+});
+
+app.get('/api/v1', (req, res) => {
+  console.log(req.cookies);
+  res.send('E-Commerce API');
+});
 
 app.use('/api/v1/auth', authRouter);
 
