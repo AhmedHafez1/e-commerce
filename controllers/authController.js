@@ -38,7 +38,12 @@ const register = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  res.send('Logout');
+  res.cookie('token', '', {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+
+  res.send();
 };
 
 module.exports = { login, logout, register };
