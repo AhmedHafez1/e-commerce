@@ -4,7 +4,22 @@ const Errors = require('../errors');
 const { attachCookiesToResponse } = require('../utils');
 
 const login = async (req, res) => {
-  res.send('Login');
+  const { email, password } = req.body;
+  if (!email || !password)
+    throw new Errors.BadRequestError('Please provide email and password');
+  const user = await User.findOne({ email });
+
+  if (!user) throw new Errors.UnauthenticatedError('No user with this email');
+
+  const isValidPassword = await user.comparePassword(password);
+
+  if (!isValidPassword)
+    throw new Errors.UnauthenticatedError('Password is not correct');
+
+  const tokenUser = { name: user.name, role: user.role, email: user.email };
+  attachCookiesToResponse({ res, payload: tokenUser });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const register = async (req, res) => {
